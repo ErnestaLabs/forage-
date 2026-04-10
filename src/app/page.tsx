@@ -11,7 +11,6 @@ import { PricingSection } from '@/components/PricingSection';
 import { GuaranteeSection } from '@/components/GuaranteeSection';
 import { FAQSection } from '@/components/FAQSection';
 import { FinalCTASection, Footer } from '@/components/FinalCTASection';
-import { ChatWidget } from '@/components/ChatWidget';
 
 export default function Home() {
   return (
@@ -32,7 +31,6 @@ export default function Home() {
         <FinalCTASection />
       </main>
       <Footer />
-      <ChatWidget />
     </div>
   );
 }
