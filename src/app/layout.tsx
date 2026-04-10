@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "Forage — The Knowledge Layer Your AI Agents Are Missing",
   description: "Give your AI agents real memory, live web intelligence, and causal reasoning. 36 tools, one MCP connection. Pay per call. No subscriptions.",
   metadataBase: new URL("https://useforage.xyz"),
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
     title: "Forage — The Knowledge Layer Your AI Agents Are Missing",
     description: "Give your AI agents real memory, live web intelligence, and causal reasoning. 36 tools, one MCP connection. Pay per call. No subscriptions.",
