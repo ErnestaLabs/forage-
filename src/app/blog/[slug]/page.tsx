@@ -1202,7 +1202,7 @@ export default async function BlogPostPage({
                   className="btn btn-primary"
                   style={{ fontSize: 14, padding: '13px 28px' }}
                 >
-                  Start Free — $5 Credits
+                  Start Free — No Card Required
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                     <path
                       d="M2 7h10M8 3.5L11.5 7 8 10.5"

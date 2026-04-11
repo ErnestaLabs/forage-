@@ -93,9 +93,7 @@ export function FinalCTASection() {
             color: 'var(--foreground-secondary)',
             margin: '0 0 40px',
           }}>
-            $5 in free credits, loaded the moment you connect. No credit card. No commitment.
-            <br />
-            Enough for 167 searches, 62 scrapes, or 1 full company dossier + 33 searches.
+            No credit card required. $1.00 credit included. Cancel anytime. Choose what you use—167 searches, 62 scrapes, or 1 full company dossier + 33 searches.
           </p>
 
           {/* Signup Form */}

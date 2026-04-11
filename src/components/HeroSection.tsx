@@ -109,7 +109,7 @@ export function HeroSection() {
                 style={{ marginBottom: 24 }}
               >
                 <Sparkles size={14} />
-                $5 free credits. No credit card. No subscription.
+                $1.00 credit included. No card required.
               </span>
             </motion.div>
 
@@ -167,7 +167,7 @@ export function HeroSection() {
                 className="btn btn-primary"
                 style={{ padding: '14px 28px', fontSize: 15, fontWeight: 600 }}
               >
-                Get $5 Free Credits
+                Get Started Free
                 <ArrowRight size={16} />
               </motion.button>
               <motion.button

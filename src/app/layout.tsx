@@ -69,7 +69,7 @@ export default function RootLayout({
                     "@type": "Offer",
                     "price": "0",
                     "priceCurrency": "USD",
-                    "description": "$5 free credits on signup"
+                    "description": "No credit card required · $1.00 credit included · Cancel anytime"
                   }
                 }
               ]

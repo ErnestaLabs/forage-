@@ -402,7 +402,7 @@ export function SkillsSection() {
               color: 'var(--foreground)',
               margin: '0 0 8px',
             }}>
-              $5 free credits
+              $1.00 credit included
             </h3>
             <p style={{
               fontSize: 14,
@@ -410,8 +410,7 @@ export function SkillsSection() {
               margin: 0,
               lineHeight: 1.6,
             }}>
-              New accounts get $5 of free credits to try all tools and skills.
-              No credit card required.
+              No card required. Cancel anytime. Use it on any tool or Skill.
             </p>
           </div>
         </motion.div>

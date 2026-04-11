@@ -161,7 +161,7 @@ export function ValueStackSection() {
             onClick={() => scrollTo('#signup')}
             className="btn btn-primary"
           >
-            Start Free — $5 Credits, No Card
+            Start Free — No Card Required
             <ArrowRight size={16} />
           </motion.button>
         </motion.div>
