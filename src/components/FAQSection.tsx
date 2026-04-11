@@ -6,28 +6,24 @@ import { Plus, Minus } from 'lucide-react';
 
 const faqs = [
   {
-    q: 'Is this a search wrapper?',
-    a: "No. Search is one capability. Forage searches, scrapes, discovers emails, extracts LinkedIn data, pulls Crunchbase, checks reviews, maps markets, analyzes competitors, detects hiring signals, and synthesizes it all into a knowledge graph that remembers. Every result feeds the graph. Every query checks the graph first.",
+    q: "Can't I just save agent outputs to a database?",
+    a: "You can store the data. Forage makes it reasoned over. The difference is an agent querying 'what pattern worked on campaigns like this?' versus you writing a SQL query, interpreting the results, and re-prompting. Forage is the layer between the data and the agent's next autonomous decision.",
   },
   {
-    q: 'Does the knowledge graph actually persist between sessions?',
-    a: "Yes. Everything your agent discovers stays in the graph permanently. You can query it, add claims to it, analyze causal chains, simulate interventions. Your agent's institutional knowledge grows every session. Next time you ask about the same company, it already knows — and adds only what changed.",
+    q: 'I already use a vector database / RAG pipeline.',
+    a: "Vector search finds similar content. Forage tracks typed entities, temporal deltas, causal decision chains, and outcome history. You can't ask Pinecone why a trade worked or what changed at a competitor last Tuesday. That requires a reasoning graph, not similarity retrieval.",
   },
   {
-    q: 'Do I need multiple API keys?',
-    a: "No. One Apify token. We orchestrate everything server-side. No SerpAPI key. No Jina key. No Apollo key. No Google Places key. You bring Apify credentials. We handle sourcing, orchestration, deduplication, graph enrichment, and causal analysis.",
+    q: 'My agents already have memory.',
+    a: "Per-agent memory is per-agent. Your Instantly agent and your Polymarket agent and your Apify actors are not sharing context. Forage is cross-agent, cross-stack, cross-session. Every agent contributes to the same graph — and inherits from every other agent that ran before it.",
   },
   {
-    q: 'How fresh is the data?',
-    a: "Real-time for web searches and scrapes. Graph data is what your agent discovered — plus what others using Forage have discovered and shared into the graph. You own your queries; the graph is shared intelligence that compounds across the entire network.",
+    q: "Why can't I just build this myself?",
+    a: "You could build the storage. The hard part is the schema that stays coherent as your stack evolves, the natural language query layer agents can actually use, and the temporal + causal structure that makes pattern recognition possible. Forage is the opinionated, agent-native version of what you'd spend six months building — and probably rebuilding twice.",
   },
   {
-    q: 'What are Skills exactly?',
-    a: "Skills are pre-built multi-source workflows wrapped in a single tool call. Instead of chaining 5 tools yourself, you call one Skill and get a complete structured result. Company Dossier fires 6 sources in parallel — web, LinkedIn, Crunchbase, Clearbit, email finders, tech stack — and merges them into one response.",
-  },
-  {
-    q: 'What happens if your service goes down?',
-    a: "Your agent keeps working on cached graph data. It just can't do live research. You'll hear from us immediately if there's an outage. And because the graph is persistent, everything it already learned is still there the moment we're back.",
+    q: "What's the actual network effect?",
+    a: "Every agent that writes to Forage makes every future agent smarter. 1,000 email campaigns don't just produce results — they produce a simulation library. Your agent doesn't wait to be asked. It's already run 100 variations, found the pattern, and built the next strategy. The longer you run, the wider the gap between your stack and one starting from scratch.",
   },
 ];
 
@@ -106,9 +102,9 @@ export function FAQSection() {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6 }}
         >
-          <p className="section-label">FAQ</p>
+          <p className="section-label">Questions</p>
           <h2 className="section-title" style={{ textAlign: 'left', marginBottom: 48 }}>
-            Frequently asked questions
+            The objections you're already thinking about.
           </h2>
 
           <div className="card" style={{ padding: '0 28px' }}>

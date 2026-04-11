@@ -243,7 +243,7 @@ export function HeroSection() {
           }}>
             Works with
           </span>
-          {['Claude Desktop', 'n8n', 'GPT-4', 'Apify', 'Instantly', 'Polymarket', 'Any MCP Client'].map(name => (
+          {['n8n', 'Instantly', 'Apify', 'Polymarket', 'Kalshi', 'Clay', 'OpenClaw', 'LangGraph', 'CrewAI', 'Cursor'].map(name => (
             <span
               key={name}
               style={{
