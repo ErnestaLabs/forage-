@@ -113,7 +113,7 @@ export function HeroSection() {
               </span>
             </motion.div>
 
-            {/* Headline */}
+            {/* Headline — Intent Stage */}
             <motion.h1
               variants={fadeUp}
               style={{
@@ -128,9 +128,9 @@ export function HeroSection() {
                 backgroundClip: 'text',
               }}
             >
-              Your agent
+              Your agents
               <br />
-              starts from zero.
+              are working.
               <br />
               <span style={{
                 background: 'linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%)',
@@ -138,11 +138,11 @@ export function HeroSection() {
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
               }}>
-                Every single time.
+                The work isn't.
               </span>
             </motion.h1>
 
-            {/* Subheadline */}
+            {/* Subheadline — Intent: names the feeling */}
             <motion.p
               variants={fadeUp}
               style={{
@@ -150,12 +150,12 @@ export function HeroSection() {
                 lineHeight: 1.6,
                 color: 'var(--foreground-secondary)',
                 margin: '0 0 32px',
-                maxWidth: 460,
+                maxWidth: 480,
               }}
             >
-              Every session, your agent forgets what it learned. Every hallucination costs you a decision.
-              Every reset means your competitor pulls further ahead.
-              <span style={{ color: 'var(--success)', fontWeight: 500 }}> That is the problem. Not the model. The memory.</span>
+              Every lead enriched. Every trade logged. Every competitor scraped.
+              Gone at the end of the run.
+              <span style={{ color: 'var(--success)', fontWeight: 500 }}> Forage is the shared intelligence layer that makes agent work compound.</span>
             </motion.p>
 
             {/* CTAs */}
@@ -167,17 +167,17 @@ export function HeroSection() {
                 className="btn btn-primary"
                 style={{ padding: '14px 28px', fontSize: 15, fontWeight: 600 }}
               >
-                Get Started Free
+                Get early access
                 <ArrowRight size={16} />
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => scrollTo('#how-it-works')}
+                onClick={() => scrollTo('#features')}
                 className="btn btn-secondary"
                 style={{ padding: '14px 28px', fontSize: 15 }}
               >
-                See Why It Compounds
+                See how it compounds
               </motion.button>
             </motion.div>
 
@@ -194,9 +194,9 @@ export function HeroSection() {
               }}
             >
               {[
-                'No hallucinations. Data is sourced live, not recalled.',
-                'Every session builds on the last. Nothing resets.',
+                'Agent outputs compound instead of disappearing.',
                 '36 tools. Pay per call. No subscription.',
+                'Used by operators on n8n, Polymarket, Instantly, Apify.',
               ].map((text, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <div style={{
@@ -243,7 +243,7 @@ export function HeroSection() {
           }}>
             Works with
           </span>
-          {['Claude Desktop', 'n8n', 'GPT-4', 'Apify', 'Any MCP Client'].map(name => (
+          {['Claude Desktop', 'n8n', 'GPT-4', 'Apify', 'Instantly', 'Polymarket', 'Any MCP Client'].map(name => (
             <span
               key={name}
               style={{

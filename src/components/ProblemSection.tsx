@@ -1,153 +1,196 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Brain, AlertTriangle, TrendingUp } from 'lucide-react';
-
-const problems = [
-  {
-    icon: Brain,
-    title: 'It forgets everything overnight',
-    description: "You asked about Stripe last Tuesday. Competitors, investors, tech stack, hiring signals. Today you ask again. It starts from zero. Every single session. All that work, gone. There is no accumulation.",
-    stat: '0',
-    statLabel: 'entities carried forward',
-  },
-  {
-    icon: AlertTriangle,
-    title: 'It invents what it does not know',
-    description: "Ask for 50 qualified leads. It returns email addresses with 90% confidence. Half do not exist. Ask who the real competitors are. It names companies that folded two years ago. You are not running intelligence. You are running a very confident guesser.",
-    stat: '~30%',
-    statLabel: 'of outputs fabricated',
-  },
-  {
-    icon: TrendingUp,
-    title: 'The gap compounds daily',
-    description: "While your agent resets each morning, a competitor is adding 200 entities to a graph it has been building for six months. That graph knows your market better than you do. The gap is not static. It widens every day you wait.",
-    stat: '6 mo',
-    statLabel: 'head start lost while waiting',
-  },
-];
 
 export function ProblemSection() {
   return (
     <section className="section" style={{ background: 'var(--background-secondary)' }}>
-      {/* Background accent */}
-      <div style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 800,
-        height: 400,
-        background: 'radial-gradient(ellipse, rgba(139, 92, 246, 0.08) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
-
-      <div className="container" style={{ position: 'relative' }}>
-        {/* Header */}
+      <div className="container" style={{ maxWidth: 800, position: 'relative' }}>
+        {/* Section label */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6 }}
-          style={{ maxWidth: 640, marginBottom: 64 }}
+          style={{ marginBottom: 48 }}
         >
-          <h2 style={{
-            fontSize: 'clamp(32px, 4vw, 48px)',
-            fontWeight: 600,
-            letterSpacing: '-0.03em',
-            color: 'var(--foreground)',
-            lineHeight: 1.1,
-            margin: 0,
+          <p style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: 11,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--accent-light)',
+            margin: '0 0 16px',
           }}>
-            The model is not the problem.
-            <br />
-            <span style={{ color: 'var(--error)' }}>The problem is that it forgets you exist.</span>
-          </h2>
+            Here's what's actually happening
+          </p>
+
+          {/* Root cause — Logical Certainty stage */}
+          <p style={{
+            fontSize: 17,
+            lineHeight: 1.8,
+            color: 'var(--foreground-secondary)',
+            margin: '0 0 32px',
+          }}>
+            You've built something impressive.
+          </p>
+
+          <p style={{
+            fontSize: 17,
+            lineHeight: 1.8,
+            color: 'var(--foreground-secondary)',
+            margin: '0 0 32px',
+          }}>
+            You've got Claygent enriching leads, Apify scraping competitors, Instantly managing replies, n8n wiring it all together. Maybe a Polymarket agent making calls on prediction markets. Maybe Cursor shipping features while you sleep.
+          </p>
+
+          <p style={{
+            fontSize: 17,
+            lineHeight: 1.8,
+            color: 'var(--foreground-secondary)',
+            margin: '0 0 32px',
+          }}>
+            It works. You know it works.
+          </p>
+
+          <p style={{
+            fontSize: 17,
+            lineHeight: 1.8,
+            color: 'var(--foreground-secondary)',
+            margin: '0 0 32px',
+          }}>
+            But here's what you've probably noticed — and maybe haven't said out loud yet.
+          </p>
         </motion.div>
 
-        {/* Cards Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: 24,
-        }}>
-          {problems.map((problem, i) => (
+        {/* Force yes sequence */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          {[
+            {
+              q: 'Every time an agent runs, it starts from the same place it started last time.',
+              a: 'The lead it enriched two weeks ago? Gone. The rationale behind that trade? Nowhere. The competitor pricing shift from Tuesday? Lost in a log file nobody reads. The reply intent signal that told you this ICP actually converts? Buried in a CRM field no future agent will ever touch.',
+            },
+            {
+              q: 'Your agents are doing good work. Individual, isolated, non-compounding work.',
+              a: 'And every day you run them that way, you are leaving the most valuable thing on the table — the accumulated intelligence those runs should be building.',
+            },
+          ].map((block, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="card"
+              transition={{ duration: 0.5, delay: i * 0.15 }}
               style={{
-                padding: 32,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 20,
+                borderLeft: '2px solid var(--accent)',
+                paddingLeft: 24,
               }}
             >
-              {/* Icon */}
-              <div style={{
-                width: 48,
-                height: 48,
-                borderRadius: 12,
-                background: 'var(--glass)',
-                border: '1px solid var(--border)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <problem.icon size={22} style={{ color: 'var(--accent-light)' }} />
-              </div>
-
-              {/* Title */}
-              <h3 style={{
-                fontSize: 20,
+              <p style={{
+                fontSize: 22,
                 fontWeight: 600,
                 color: 'var(--foreground)',
-                margin: 0,
-                letterSpacing: '-0.02em',
+                margin: '0 0 12px',
+                letterSpacing: '-0.01em',
+                lineHeight: 1.4,
               }}>
-                {problem.title}
-              </h3>
-
-              {/* Description */}
+                {block.q}
+              </p>
               <p style={{
-                fontSize: 15,
+                fontSize: 16,
                 lineHeight: 1.7,
                 color: 'var(--foreground-secondary)',
                 margin: 0,
-                flex: 1,
               }}>
-                {problem.description}
+                {block.a}
               </p>
-
-              {/* Stat */}
-              <div style={{
-                paddingTop: 20,
-                borderTop: '1px solid var(--border)',
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: 8,
-              }}>
-                <span style={{
-                  fontSize: 32,
-                  fontWeight: 700,
-                  color: 'var(--error)',
-                  letterSpacing: '-0.03em',
-                }}>
-                  {problem.stat}
-                </span>
-                <span style={{
-                  fontSize: 14,
-                  color: 'var(--foreground-tertiary)',
-                }}>
-                  {problem.statLabel}
-                </span>
-              </div>
             </motion.div>
           ))}
         </div>
+
+        {/* Pull quote — the line that defines the category */}
+        <motion.blockquote
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          style={{
+            marginTop: 64,
+            marginBottom: 0,
+            padding: '32px 40px',
+            background: 'linear-gradient(135deg, var(--accent-dim) 0%, var(--cyan-dim) 100%)',
+            border: '1px solid var(--border)',
+            borderRadius: 16,
+          }}
+        >
+          <p style={{
+            fontSize: 22,
+            fontWeight: 600,
+            color: 'var(--foreground)',
+            margin: 0,
+            lineHeight: 1.4,
+            letterSpacing: '-0.01em',
+          }}>
+            "The bottleneck isn't that your agents can't think.
+            It's that most of their thinking dies where it was created."
+          </p>
+        </motion.blockquote>
+
+        {/* Force yes — "you like what you built" */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{ marginTop: 64 }}
+        >
+          <p style={{
+            fontSize: 24,
+            fontWeight: 600,
+            color: 'var(--foreground)',
+            margin: '0 0 16px',
+            letterSpacing: '-0.02em',
+          }}>
+            You like what you've built, right?
+          </p>
+
+          <p style={{
+            fontSize: 16,
+            lineHeight: 1.8,
+            color: 'var(--foreground-secondary)',
+            margin: '0 0 24px',
+          }}>
+            Fair. It's fast. It's automated. It handles work that used to take an entire team.
+          </p>
+
+          <p style={{
+            fontSize: 16,
+            lineHeight: 1.8,
+            color: 'var(--foreground-secondary)',
+            margin: '0 0 24px',
+          }}>
+            But if you could change one thing — just one — would it be that every run starts fresh? That the lead your agent spent 20 API calls enriching last month has to be re-enriched again today because nothing persisted? That your trading agent has no memory of the market context that led to a winning call six weeks ago?
+          </p>
+
+          <p style={{
+            fontSize: 16,
+            lineHeight: 1.8,
+            color: 'var(--foreground-secondary)',
+            margin: 0,
+          }}>
+            Because here's the problem — and it's not the agents, it's not the tools, and it's not the prompts:
+          </p>
+
+          <p style={{
+            fontSize: 20,
+            fontWeight: 600,
+            color: 'var(--accent)',
+            margin: '24px 0 0',
+            letterSpacing: '-0.01em',
+          }}>
+            Your stack has no shared substrate.
+          </p>
+        </motion.div>
       </div>
     </section>
   );
