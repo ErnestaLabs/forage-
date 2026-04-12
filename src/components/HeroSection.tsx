@@ -1,5 +1,5 @@
 'use client';
-// Positioning update deployed v2
+// Positioning update deployed v3 - Netlify auto-deploy test
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
