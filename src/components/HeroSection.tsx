@@ -1,5 +1,5 @@
 'use client';
-
+// Positioning update deployed
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
