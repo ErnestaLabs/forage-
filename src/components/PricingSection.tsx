@@ -55,7 +55,7 @@ export function PricingSection() {
             Pay per call. No minimums. No seats.
           </h2>
           <p className="section-subtitle">
-            £0.0025 per lead. No card required. $1.00 credit included. Cancel anytime.
+             £0.0025 per lead. No card required. $5.00 credit included. Cancel anytime.
           </p>
         </motion.div>
 

@@ -132,12 +132,12 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Create new user with $1.00 credit
+    // Create new user with $5.00 credit
     const newUser: UserData = {
       userId: generateUserId(),
       email: email.toLowerCase().trim(),
       apiKey: generateApiKey(),
-      credits: 1.00, // $1.00 free credit
+      credits: 5.00, // $5.00 free credit
       createdAt: new Date().toISOString(),
       lastActive: new Date().toISOString(),
       usageHistory: [],
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
     // Return success with full API key (only shown once!)
     return NextResponse.json({
       success: true,
-      message: 'Welcome to Forage! Your $1.00 credit is ready.',
+       message: 'Welcome to Forage! Your $5.00 credit is ready.',
       isNewUser: true,
       userId: newUser.userId,
       credits: newUser.credits,

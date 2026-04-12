@@ -109,7 +109,7 @@ export function HeroSection() {
                 style={{ marginBottom: 24 }}
               >
                 <Sparkles size={14} />
-                $1.00 credit included. No card required.
+                $5.00 credit included. No card required.
               </span>
             </motion.div>
 

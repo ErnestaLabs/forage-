@@ -402,7 +402,7 @@ export function SkillsSection() {
               color: 'var(--foreground)',
               margin: '0 0 8px',
             }}>
-              $1.00 credit included
+               $5.00 credit included
             </h3>
             <p style={{
               fontSize: 14,

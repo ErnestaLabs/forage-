@@ -324,7 +324,7 @@ export function SignupForm() {
               margin: '16px 0 0',
               textAlign: 'center',
             }}>
-              No credit card required · $1.00 credit included · Cancel anytime
+               No credit card required · $5.00 credit included · Cancel anytime
             </p>
           </motion.form>
         )}
