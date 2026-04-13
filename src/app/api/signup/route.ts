@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 
-// Apify API configuration
-const APIFY_TOKEN = process.env.APIFY_TOKEN!;
+// Apify API configuration - try multiple env var names
+const APIFY_TOKEN = process.env.APIFY_TOKEN || process.env.FORAGE_TOKEN;
 const KV_STORE_NAME = 'forage-users';
 
 // Generate a unique API key for the user
@@ -107,8 +107,9 @@ export async function POST(request: NextRequest) {
     }
 
     if (!APIFY_TOKEN) {
+      console.error('APIFY_TOKEN environment variable is missing. Check Netlify environment variables.');
       return NextResponse.json(
-        { error: 'Server configuration error' },
+        { error: 'Server configuration error: APIFY_TOKEN environment variable is missing. Please check deployment configuration.' },
         { status: 500 }
       );
     }
