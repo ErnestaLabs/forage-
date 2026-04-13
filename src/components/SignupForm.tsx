@@ -119,6 +119,7 @@ export function SignupForm() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                marginBottom: 8,
               }}>
                 <span style={{ fontSize: 14, color: 'var(--foreground-secondary)' }}>
                   Available Credit
@@ -132,6 +133,14 @@ export function SignupForm() {
                   ${response.credits.toFixed(2)}
                 </span>
               </div>
+              <p style={{
+                fontSize: 11,
+                color: 'var(--foreground-tertiary)',
+                margin: 0,
+                lineHeight: 1.4,
+              }}>
+                This credit is for Forage tools only, separate from Apify's platform credit.
+              </p>
             </div>
 
             {/* API Key */}
