@@ -213,7 +213,7 @@ export function Footer() {
               margin: 0,
               maxWidth: 240,
             }}>
-              Data and intelligence layer for AI agents
+              Data and intelligence substrate for AI agents
             </p>
           </div>
 
