@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         from: 'Forage <onboarding@resend.dev>',
         to: email,
-        subject: 'Your Forage API Key - £1 Free Credits Inside',
+        subject: 'Your Forage API Key - $5.00 Free Credits Inside',
         html: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
             <h1 style="color: #8b5cf6; margin-bottom: 24px;">Welcome to Forage!</h1>
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
             </div>
 
             <p style="font-size: 16px; line-height: 1.6; color: #333;">
-              <strong>You've got £1 free credits</strong> - that's 400 verified B2B leads to test with.
+               <strong>You've got $5.00 free credits</strong> - that's 2000 verified B2B leads to test with.
             </p>
 
             <h2 style="color: #333; margin-top: 32px;">Quick Start</h2>
