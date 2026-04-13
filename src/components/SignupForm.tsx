@@ -146,7 +146,7 @@ export function SignupForm() {
                   letterSpacing: '0.05em',
                   textTransform: 'uppercase',
                 }}>
-                  Your API Key (save this!)
+                  Your Forage API Key (save this!)
                 </label>
                 <div style={{
                   display: 'flex',
@@ -187,12 +187,19 @@ export function SignupForm() {
                     {copied ? <Check size={18} /> : <Copy size={18} />}
                   </motion.button>
                 </div>
-                <p style={{
+                 <p style={{
                   fontSize: 12,
                   color: 'var(--warning)',
                   margin: '8px 0 0',
                 }}>
                   Save this key now — it won&apos;t be shown again!
+                </p>
+                <p style={{
+                  fontSize: 11,
+                  color: 'var(--foreground-tertiary)',
+                  margin: '4px 0 0',
+                }}>
+                  This is your Forage API key for credit tracking, not your Apify token.
                 </p>
               </div>
             )}
@@ -210,7 +217,7 @@ export function SignupForm() {
                 color: 'var(--foreground)',
                 margin: '0 0 12px',
               }}>
-                Quick Start
+                Next Steps to Use Your $5 Credit
               </h4>
               <div style={{
                 fontFamily: 'var(--font-mono)',
@@ -219,14 +226,45 @@ export function SignupForm() {
                 lineHeight: 1.8,
               }}>
                 <div style={{ marginBottom: 8 }}>
-                  <span style={{ color: 'var(--foreground-muted)' }}># Claude Desktop</span>
+                  <span style={{ color: 'var(--foreground-muted)' }}>1. Get your Apify token (free $5 from Apify)</span>
                   <br />
-                  npx forage-mcp --key {response.apiKey.slice(0, 8)}...
+                  <a 
+                    href="https://console.apify.com/sign-up" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--accent)', textDecoration: 'none' }}
+                  >
+                    Sign up at Apify
+                  </a>
+                  , then find your token in{' '}
+                  <a 
+                    href="https://console.apify.com/account#/integrations" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--accent)', textDecoration: 'none' }}
+                  >
+                    Account → Integrations
+                  </a>
+                </div>
+                <div style={{ marginBottom: 8 }}>
+                  <span style={{ color: 'var(--foreground-muted)' }}>2. Connect to the Forage actor</span>
+                  <br />
+                  Use the MCP server URL:{' '}
+                  <code style={{ background: 'var(--background)', padding: '2px 4px', borderRadius: 4 }}>
+                    https://ernesta-labs--forage.apify.actor/mcp
+                  </code>
+                </div>
+                <div style={{ marginBottom: 8 }}>
+                  <span style={{ color: 'var(--foreground-muted)' }}>3. Set environment variable</span>
+                  <br />
+                  <code style={{ background: 'var(--background)', padding: '2px 4px', borderRadius: 4 }}>
+                    APIFY_API_TOKEN=your_apify_token_here
+                  </code>
                 </div>
                 <div>
-                  <span style={{ color: 'var(--foreground-muted)' }}># Direct API</span>
+                  <span style={{ color: 'var(--foreground-muted)' }}>4. Start using tools</span>
                   <br />
-                  npm install forage-client
+                  Your $5 credit will be tracked by email. Usage deducts from this balance.
                 </div>
               </div>
             </div>

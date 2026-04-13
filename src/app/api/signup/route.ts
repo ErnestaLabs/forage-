@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
     // Return success with full API key (only shown once!)
     return NextResponse.json({
       success: true,
-       message: 'Welcome to Forage! Your $5.00 credit is ready.',
+       message: 'Welcome to Forage! Your $5.00 credit is loaded. Use it with the Apify actor at https://apify.com/ernesta_labs/forage',
       isNewUser: true,
       userId: newUser.userId,
       credits: newUser.credits,
