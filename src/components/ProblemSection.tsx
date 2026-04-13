@@ -32,7 +32,7 @@ export function ProblemSection() {
             color: 'var(--foreground-secondary)',
             margin: '0 0 32px',
           }}>
-            You've built something impressive.
+            You've built an impressive AI agent stack.
           </p>
 
           <p style={{

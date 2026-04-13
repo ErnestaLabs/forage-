@@ -130,7 +130,7 @@ export function HeroSection() {
             >
               Your agents
               <br />
-              are working.
+              automate tasks.
               <br />
               <span style={{
                 background: 'linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%)',
@@ -138,7 +138,7 @@ export function HeroSection() {
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
               }}>
-                The work isn't.
+                Your intelligence doesn't compound.
               </span>
             </motion.h1>
 
@@ -153,9 +153,8 @@ export function HeroSection() {
                 maxWidth: 480,
               }}
             >
-              Every lead enriched. Every trade logged. Every competitor scraped.
-              Gone at the end of the run.
-              <span style={{ color: 'var(--success)', fontWeight: 500 }}> Forage is the shared intelligence layer that makes agent work compound.</span>
+              Every lead enriched, every trade logged, every competitor scraped—gone at the end of the run.
+              <span style={{ color: 'var(--success)', fontWeight: 500 }}> Forage is the shared intelligence substrate that makes agent work compound.</span>
             </motion.p>
 
             {/* CTAs */}

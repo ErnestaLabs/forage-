@@ -17,7 +17,7 @@ interface Skill {
 const skills: Skill[] = [
   {
     name: 'Company Dossier',
-    description: 'Your agent gets a complete company profile — financials, contacts, web presence — stored in the graph for every future session.',
+    description: 'Your agent builds a persistent company dossier—financials, contacts, web presence—stored in the graph. Every future session starts with full context, no re‑enrichment needed.',
     steps: ['get_company_info()', 'find_emails()', 'search_web()', 'enrich_entity()', 'synthesise_dossier()'],
     perTrigger: '$0.50',
     monthly: '$0',
@@ -26,7 +26,7 @@ const skills: Skill[] = [
   },
   {
     name: 'Prospect This Company',
-    description: 'Your agent gets verified decision-maker contacts — name, email, seniority — ready to act on without any follow-up research.',
+    description: 'Your agent pulls verified decision‑maker contacts—name, email, seniority—ready for outreach. No manual research, ever.',
     steps: ['find_leads()', 'find_emails()', 'score_by_seniority()', 'enrich_profiles()'],
     perTrigger: '$0.75',
     monthly: '$0',
@@ -35,7 +35,7 @@ const skills: Skill[] = [
   },
   {
     name: 'Outbound List Builder',
-    description: 'Your agent gets 100 enriched leads with verified emails, export-ready — what used to take a day takes one call.',
+    description: 'Your agent builds a targeted outbound list—100 enriched leads with verified emails, export‑ready. What used to take a day now takes one call.',
     steps: ['find_leads(100)', 'verify_emails()', 'enrich()', 'format_for_export()'],
     perTrigger: '$3.50',
     monthly: '$0',
@@ -44,7 +44,7 @@ const skills: Skill[] = [
   },
   {
     name: 'Local Market Map',
-    description: 'Your agent gets every business of a type in a location — with contacts — mapped and stored so the next local query costs nothing.',
+    description: 'Your agent maps every business of a type in a location—with contacts—and stores it in the graph. The next local query costs nothing.',
     steps: ['search_local_businesses()', 'get_contact_details()', 'enrich()', 'map_output()'],
     perTrigger: '$0.80',
     monthly: '$0',
@@ -53,7 +53,7 @@ const skills: Skill[] = [
   },
   {
     name: 'Competitor Intelligence',
-    description: 'Your agent gets current pricing, features, and positioning from any competitor site — compared against what it already knows in the graph.',
+    description: 'Your agent scrapes current pricing, features, and positioning from any competitor site—compared against historical data in the graph.',
     steps: ['scrape_site()', 'extract_pricing()', 'extract_features()', 'knowledge_graph_compare()'],
     perTrigger: '$0.80',
     monthly: '$0',
@@ -62,7 +62,7 @@ const skills: Skill[] = [
   },
   {
     name: 'Decision Maker Finder',
-    description: 'Your agent gets 20 verified senior contacts at any company — scored by seniority, ready to hand off to outreach immediately.',
+    description: 'Your agent finds 20 verified senior contacts at any company—scored by seniority, ready for immediate outreach.',
     steps: ['find_leads()', 'verify_emails()', 'get_linkedin()', 'score_seniority()'],
     perTrigger: '$1.00',
     monthly: '$0',
@@ -71,7 +71,7 @@ const skills: Skill[] = [
   },
   {
     name: 'Competitor Ads',
-    description: 'Your agent gets every active ad from any competitor — copy, creative angle, and landing page — without you having to monitor anything.',
+    description: 'Your agent scrapes every active ad from any competitor—copy, creative angle, landing page—without manual monitoring.',
     steps: ['scrape_ads_library()', 'extract_ad_copy()', 'analyze_landing_pages()'],
     perTrigger: '$0.65',
     monthly: '$0',

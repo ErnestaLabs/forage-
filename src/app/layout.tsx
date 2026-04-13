@@ -13,23 +13,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Forage — The Shared Intelligence Layer That Makes Agent Work Compound",
-  description: "Give your AI agents a shared intelligence layer that makes their work compound. Real memory, live web intelligence, causal reasoning. 36 tools, one MCP connection. Pay per call. No subscriptions.",
+  title: "Forage — The Shared Intelligence Substrate That Makes Agent Work Compound",
+  description: "Give your AI agents a shared intelligence substrate that makes their work compound. Real memory, live web intelligence, causal reasoning. 36 tools, one MCP connection. Pay per call. No subscriptions.",
   metadataBase: new URL("https://useforage.xyz"),
   icons: {
     icon: "/favicon.svg",
   },
   openGraph: {
-    title: "Forage — The Shared Intelligence Layer That Makes Agent Work Compound",
-    description: "Give your AI agents a shared intelligence layer that makes their work compound. Real memory, live web intelligence, causal reasoning. 36 tools, one MCP connection. Pay per call. No subscriptions.",
+    title: "Forage — The Shared Intelligence Substrate That Makes Agent Work Compound",
+    description: "Give your AI agents a shared intelligence substrate that makes their work compound. Real memory, live web intelligence, causal reasoning. 36 tools, one MCP connection. Pay per call. No subscriptions.",
     url: "https://useforage.xyz",
     siteName: "Forage",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Forage — The Shared Intelligence Layer That Makes Agent Work Compound",
-    description: "Give your AI agents a shared intelligence layer that makes their work compound. Real memory, live web intelligence, causal reasoning. 36 tools, one MCP connection. Pay per call. No subscriptions.",
+    title: "Forage — The Shared Intelligence Substrate That Makes Agent Work Compound",
+    description: "Give your AI agents a shared intelligence substrate that makes their work compound. Real memory, live web intelligence, causal reasoning. 36 tools, one MCP connection. Pay per call. No subscriptions.",
   },
   robots: {
     index: true,
@@ -56,14 +56,14 @@ export default function RootLayout({
                   "name": "Ernesta Labs",
                   "url": "https://useforage.xyz",
                   "email": "director@useforage.xyz",
-                  "description": "AI agent intelligence platform — shared intelligence layer, live web intelligence, causal reasoning."
+                  "description": "AI agent intelligence platform — shared intelligence substrate, live web intelligence, causal reasoning."
                 },
                 {
                   "@type": "SoftwareApplication",
                   "name": "Forage",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Web",
-                  "description": "MCP server giving AI agents a shared intelligence layer that makes their work compound. 36 tools. Pay per call.",
+                  "description": "MCP server giving AI agents a shared intelligence substrate that makes their work compound. 36 tools. Pay per call.",
                   "url": "https://useforage.xyz",
                   "offers": {
                     "@type": "Offer",
