@@ -161,71 +161,69 @@ export function SignupForm() {
 
 
 
-            {/* Next steps */}
-            <div style={{
-              padding: 20,
-              background: 'linear-gradient(135deg, var(--accent-dim) 0%, var(--cyan-dim) 100%)',
-              borderRadius: 12,
-              border: '1px solid var(--border)',
-            }}>
-              <h4 style={{
-                fontSize: 14,
-                fontWeight: 600,
-                color: 'var(--foreground)',
-                margin: '0 0 12px',
-              }}>
-                Next Steps to Use Your $5 Credit
-              </h4>
-              <div style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 12,
-                color: 'var(--foreground-secondary)',
-                lineHeight: 1.8,
-              }}>
+             {/* Connect instructions */}
+             <div style={{
+               padding: 20,
+               background: 'linear-gradient(135deg, var(--accent-dim) 0%, var(--cyan-dim) 100%)',
+               borderRadius: 12,
+               border: '1px solid var(--border)',
+             }}>
+               <h4 style={{
+                 fontSize: 14,
+                 fontWeight: 600,
+                 color: 'var(--foreground)',
+                 margin: '0 0 12px',
+               }}>
+                 Connect to Forage
+               </h4>
+               <div style={{
+                 fontFamily: 'var(--font-mono)',
+                 fontSize: 12,
+                 color: 'var(--foreground-secondary)',
+                 lineHeight: 1.8,
+               }}>
+                  <div style={{ marginBottom: 8 }}>
+                    <span style={{ color: 'var(--foreground-muted)' }}>1. Get your Apify token</span>
+                    <br />
+                    <a 
+                      href="https://console.apify.com/account#/integrations" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      style={{ color: 'var(--accent)', textDecoration: 'none' }}
+                    >
+                      Apify Account → Integrations
+                    </a>
+                    {' (or '}
+                    <a 
+                      href="https://console.apify.com/sign-up" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      style={{ color: 'var(--accent)', textDecoration: 'none' }}
+                    >
+                      sign up
+                    </a>
+                    {' if new)'}
+                  </div>
                  <div style={{ marginBottom: 8 }}>
-                   <span style={{ color: 'var(--foreground-muted)' }}>1. Use your Apify token (most users already have one)</span>
+                   <span style={{ color: 'var(--foreground-muted)' }}>2. Add MCP server to your client</span>
                    <br />
-                   Find your token in{' '}
-                   <a 
-                     href="https://console.apify.com/account#/integrations" 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     style={{ color: 'var(--accent)', textDecoration: 'none' }}
-                   >
-                     Apify Account → Integrations
-                   </a>
-                   {' '}or{' '}
-                   <a 
-                     href="https://console.apify.com/sign-up" 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     style={{ color: 'var(--accent)', textDecoration: 'none' }}
-                   >
-                     sign up if you don't have an account
-                   </a>
+                   URL:{' '}
+                   <code style={{ background: 'var(--background)', padding: '2px 4px', borderRadius: 4 }}>
+                     https://ernesta-labs--forage.apify.actor/mcp
+                   </code>
+                   <br />
+                   Set:{' '}
+                   <code style={{ background: 'var(--background)', padding: '2px 4px', borderRadius: 4 }}>
+                     APIFY_API_TOKEN=your_token
+                   </code>
                  </div>
-                <div style={{ marginBottom: 8 }}>
-                  <span style={{ color: 'var(--foreground-muted)' }}>2. Connect to the Forage actor</span>
-                  <br />
-                  Use the MCP server URL:{' '}
-                  <code style={{ background: 'var(--background)', padding: '2px 4px', borderRadius: 4 }}>
-                    https://ernesta-labs--forage.apify.actor/mcp
-                  </code>
-                </div>
-                <div style={{ marginBottom: 8 }}>
-                  <span style={{ color: 'var(--foreground-muted)' }}>3. Set environment variable</span>
-                  <br />
-                  <code style={{ background: 'var(--background)', padding: '2px 4px', borderRadius: 4 }}>
-                    APIFY_API_TOKEN=your_apify_token_here
-                  </code>
-                </div>
-                <div>
-                  <span style={{ color: 'var(--foreground-muted)' }}>4. Start using tools</span>
-                  <br />
-                  Your $5 credit will be tracked by email. Usage deducts from this balance.
-                </div>
-              </div>
-            </div>
+                 <div>
+                   <span style={{ color: 'var(--foreground-muted)' }}>3. Start using tools</span>
+                   <br />
+                   Your $5 Forage credit is tracked by this email. Usage deducts from this balance.
+                 </div>
+               </div>
+             </div>
           </motion.div>
         ) : (
           <motion.form

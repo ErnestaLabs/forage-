@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     // No API key needed - users connect via Apify MCP actor
     return NextResponse.json({
       success: true,
-      message: 'Your $5.00 credit is ready! Use it with the Apify actor at https://apify.com/ernesta_labs/forage',
+      message: '$5 Forage credit loaded. Connect via the Apify actor: https://apify.com/ernesta_labs/forage',
       isNewUser: true,
       userId: 'user_' + crypto.randomBytes(8).toString('hex'),
       credits: 5.00,
