@@ -182,27 +182,28 @@ export function SignupForm() {
                 color: 'var(--foreground-secondary)',
                 lineHeight: 1.8,
               }}>
-                <div style={{ marginBottom: 8 }}>
-                  <span style={{ color: 'var(--foreground-muted)' }}>1. Get your Apify token (free $5 from Apify)</span>
-                  <br />
-                  <a 
-                    href="https://console.apify.com/sign-up" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    style={{ color: 'var(--accent)', textDecoration: 'none' }}
-                  >
-                    Sign up at Apify
-                  </a>
-                  , then find your token in{' '}
-                  <a 
-                    href="https://console.apify.com/account#/integrations" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    style={{ color: 'var(--accent)', textDecoration: 'none' }}
-                  >
-                    Account → Integrations
-                  </a>
-                </div>
+                 <div style={{ marginBottom: 8 }}>
+                   <span style={{ color: 'var(--foreground-muted)' }}>1. Use your Apify token (most users already have one)</span>
+                   <br />
+                   Find your token in{' '}
+                   <a 
+                     href="https://console.apify.com/account#/integrations" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     style={{ color: 'var(--accent)', textDecoration: 'none' }}
+                   >
+                     Apify Account → Integrations
+                   </a>
+                   {' '}or{' '}
+                   <a 
+                     href="https://console.apify.com/sign-up" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     style={{ color: 'var(--accent)', textDecoration: 'none' }}
+                   >
+                     sign up if you don't have an account
+                   </a>
+                 </div>
                 <div style={{ marginBottom: 8 }}>
                   <span style={{ color: 'var(--foreground-muted)' }}>2. Connect to the Forage actor</span>
                   <br />
