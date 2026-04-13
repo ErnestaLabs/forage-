@@ -12,15 +12,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Simplified: Always return success with credit and Apify link
-    // No API calls, no storage needed
+    // Simplified: Return success with credit and Apify link
+    // No API key needed - users connect via Apify MCP actor
     return NextResponse.json({
       success: true,
       message: 'Your $5.00 credit is ready! Use it with the Apify actor at https://apify.com/ernesta_labs/forage',
       isNewUser: true,
       userId: 'user_' + crypto.randomBytes(8).toString('hex'),
       credits: 5.00,
-      apiKey: 'forg_' + crypto.randomBytes(24).toString('hex'),
+      apiKey: '', // Not needed for Apify MCP connection
     });
 
   } catch (error) {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Check, Copy, Loader2, AlertCircle } from 'lucide-react';
+import { ArrowRight, Check, Loader2, AlertCircle } from 'lucide-react';
 
 type SignupState = 'idle' | 'loading' | 'success' | 'error';
 
@@ -20,7 +20,6 @@ export function SignupForm() {
   const [state, setState] = useState<SignupState>('idle');
   const [response, setResponse] = useState<SignupResponse | null>(null);
   const [error, setError] = useState('');
-  const [copied, setCopied] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,13 +76,7 @@ export function SignupForm() {
     });
   };
 
-  const copyApiKey = async () => {
-    if (response?.apiKey) {
-      await navigator.clipboard.writeText(response.apiKey);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+
 
   return (
     <div style={{ width: '100%', maxWidth: 480 }}>
@@ -166,75 +159,7 @@ export function SignupForm() {
               </p>
             </div>
 
-            {/* API Key */}
-            {false && response!.isNewUser && (
-              <div style={{ marginBottom: 24 }}>
-                <label style={{
-                  display: 'block',
-                  fontSize: 12,
-                  fontWeight: 500,
-                  color: 'var(--foreground-tertiary)',
-                  marginBottom: 8,
-                  letterSpacing: '0.05em',
-                  textTransform: 'uppercase',
-                }}>
-                  Your Forage API Key (save this!)
-                </label>
-                <div style={{
-                  display: 'flex',
-                  gap: 8,
-                }}>
-                  <div style={{
-                    flex: 1,
-                    padding: '12px 16px',
-                    background: 'var(--background)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 10,
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 13,
-                    color: 'var(--foreground)',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}>
-                    {response!.apiKey}
-                  </div>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={copyApiKey}
-                    style={{
-                      padding: '12px 16px',
-                      background: copied ? 'var(--success-dim)' : 'var(--glass)',
-                      border: '1px solid var(--border)',
-                      borderRadius: 10,
-                      cursor: 'pointer',
-                      color: copied ? 'var(--success)' : 'var(--foreground)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'all 0.2s',
-                    }}
-                  >
-                    {copied ? <Check size={18} /> : <Copy size={18} />}
-                  </motion.button>
-                </div>
-                 <p style={{
-                  fontSize: 12,
-                  color: 'var(--warning)',
-                  margin: '8px 0 0',
-                }}>
-                  Save this key now — it won&apos;t be shown again!
-                </p>
-                <p style={{
-                  fontSize: 11,
-                  color: 'var(--foreground-tertiary)',
-                  margin: '4px 0 0',
-                }}>
-                  This is your Forage API key for credit tracking, not your Apify token.
-                </p>
-              </div>
-            )}
+
 
             {/* Next steps */}
             <div style={{
