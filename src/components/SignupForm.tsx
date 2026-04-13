@@ -54,6 +54,29 @@ export function SignupForm() {
     }
   };
 
+  // Helper to render URLs as clickable links
+  const renderMessageWithLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+    
+    return parts.map((part, index) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'var(--accent)', textDecoration: 'none' }}
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   const copyApiKey = async () => {
     if (response?.apiKey) {
       await navigator.clipboard.writeText(response.apiKey);
@@ -97,13 +120,13 @@ export function SignupForm() {
                 }}>
                   {response.isNewUser ? "You're in!" : 'Welcome back!'}
                 </h3>
-                <p style={{
+                <div style={{
                   fontSize: 14,
                   color: 'var(--foreground-secondary)',
                   margin: 0,
                 }}>
-                  {response.message}
-                </p>
+                  {renderMessageWithLinks(response.message)}
+                </div>
               </div>
             </div>
 
@@ -144,7 +167,7 @@ export function SignupForm() {
             </div>
 
             {/* API Key */}
-            {response.isNewUser && (
+            {false && response!.isNewUser && (
               <div style={{ marginBottom: 24 }}>
                 <label style={{
                   display: 'block',
@@ -174,7 +197,7 @@ export function SignupForm() {
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                   }}>
-                    {response.apiKey}
+                    {response!.apiKey}
                   </div>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
