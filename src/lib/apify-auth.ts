@@ -29,9 +29,11 @@ export async function verifyApifyToken(token: string) {
       }
     });
 
-    const text = await res.text();
+    const buffer = await res.arrayBuffer();
+    const text = Buffer.from(buffer).toString('utf8');
+    
     if (!res.ok) {
-      return { valid: false, error: `Apify error: ${res.status} ${text}` };
+      return { valid: false, error: `Apify error: ${res.status} ${text.substring(0, 100)}` };
     }
 
     try {
@@ -43,7 +45,7 @@ export async function verifyApifyToken(token: string) {
         email: data.email
       };
     } catch (err: any) {
-      return { valid: false, error: `Apify returned invalid JSON: ${err.message}. Body: ${text.substring(0, 100)}` };
+      return { valid: false, error: `JSON parse error: ${err.message}. Len: ${text.length}. Start: ${text.substring(0, 20)}` };
     }
   } catch (error: any) {
     return { valid: false, error: `Fetch failed: ${error.message}` };
