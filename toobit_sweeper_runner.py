@@ -3,6 +3,7 @@ import os
 import time
 import json
 import logging
+from dotenv import load_dotenv
 from tools.toobit_perp_api import ToobitUSDTMClient
 from tools.toobit_spike_detector import SpikeDetector
 from tools.toobit_risk_manager import RiskManager
@@ -14,6 +15,17 @@ logging.basicConfig(
     handlers=[logging.FileHandler("toobit_sweeper.log"), logging.StreamHandler()],
 )
 logger = logging.getLogger("ToobitSweeper")
+
+# Load environment variables
+load_dotenv()  # Load from .env
+load_dotenv("trading.env", override=True)  # Load from trading.env (takes priority)
+
+logger.info(
+    f"Loaded TOOBIT_API_KEY: {os.getenv('TOOBIT_API_KEY')[:8] if os.getenv('TOOBIT_API_KEY') else 'NONE'}..."
+)
+logger.info(
+    f"Loaded TOOBIT_API_SECRET: {os.getenv('TOOBIT_API_SECRET')[:8] if os.getenv('TOOBIT_API_SECRET') else 'NONE'}..."
+)
 
 
 class ToobitSweeper:
@@ -37,10 +49,19 @@ class ToobitSweeper:
     def run_loop(self):
         logger.info(f"Starting Toobit Sweeper for {self.symbol}...")
 
+        last_heartbeat = 0
+
         # In a real scenario, this would be a WebSocket listener
         # Here we simulate or poll for demonstration
         while True:
             try:
+                now = time.time()
+                if now - last_heartbeat > 60:
+                    logger.info(
+                        f"Heartbeat: Monitoring {self.symbol}. Waiting for spikes..."
+                    )
+                    last_heartbeat = now
+
                 # 1. Check for Halt
                 if self.risk.check_halt():
                     logger.warning("Risk Halt Active. Standing by.")
@@ -85,7 +106,10 @@ class ToobitSweeper:
         logger.info(f"SPIKE DETECTED: {spike['direction']} {spike['move_pct']:.2f}%")
 
         # Sizing: 0.5% of max exposure for this symbol
-        nominal_size = self.risk.max_symbol_exposure * 0.005
+        # Ensure it meets exchange minimum (approx 1 unit for BTC = 0.001 BTC)
+        nominal_size = max(
+            self.risk.max_symbol_exposure * 0.005, 70.0
+        )  # At least $70 for BTC
 
         check = self.risk.can_trade(self.symbol, nominal_size)
         if not check["can_trade"]:
@@ -95,13 +119,21 @@ class ToobitSweeper:
         side = "BUY" if spike["direction"] == "DOWN" else "SELL"
         price = spike["current"]  # In a real system, we'd use best bid/ask
 
-        logger.info(f"Placing sweep {side} order at {price}")
+        # Toobit USDT-M quantity is in UNITS
+        # 1 unit = 0.001 BTC or 0.01 ETH (approx)
+        # We calculate based on nominal USDT
+        multiplier = 0.001 if "BTC" in self.symbol.upper() else 0.01
+        quantity = (nominal_size / price) / multiplier
+        # Ensure at least 1 unit
+        quantity = max(round(quantity), 1)
+
+        logger.info(f"Placing sweep {side} order at {price} (Qty: {quantity} units)")
 
         # Execution (LIMIT/GTX for post-only)
         res = self.client.place_order(
             symbol=self.symbol,
             side=side,
-            quantity=nominal_size / price,  # Simplified qty calc
+            quantity=quantity,
             price=price,
             order_type="POST_ONLY",
         )
@@ -110,6 +142,7 @@ class ToobitSweeper:
             self.active_trade = {
                 "id": res.get("orderId"),
                 "side": side,
+                "quantity": quantity,
                 "entry_price": price,
                 "p_ref": spike["p_ref"],
                 "extreme": spike["extreme"],
@@ -164,18 +197,36 @@ class ToobitSweeper:
                 self.close_position("STOP_LOSS")
 
     def close_position(self, reason: str):
-        # Implementation of market close...
+        if not self.active_trade:
+            return
+
         side = "SELL" if self.active_trade["side"] == "BUY" else "BUY"
-        logger.info(f"Closing position via {side} for {reason}")
+        logger.info(
+            f"Closing position {self.active_trade['id']} via {side} for {reason}"
+        )
 
-        # Write to graph
-        self.log_to_graph(reason)
+        # Place market-equivalent limit order (or just use IOC for close)
+        res = self.client.place_order(
+            symbol=self.symbol,
+            side=side,
+            quantity=self.active_trade["quantity"],
+            price=self.active_trade["entry_price"]
+            * (0.99 if side == "SELL" else 1.01),  # Aggressive price for fill
+            order_type="IOC",
+        )
 
-        self.active_trade = None
+        if res.get("status") != "ERROR":
+            logger.info(f"Close order placed successfully: {res.get('orderId')}")
+            self.log_to_graph(reason, res)
+            self.active_trade = None
+        else:
+            logger.error(f"Failed to close position: {res}")
 
-    def log_to_graph(self, reason: str):
-        # Mocking graph_write_signal
-        logger.info(f"LOGGING TO GRAPH: trade closed due to {reason}")
+    def log_to_graph(self, reason: str, api_response: dict):
+        # Implementation to log results to Forage graph
+        logger.info(
+            f"LOGGING TO GRAPH: trade {api_response.get('orderId')} closed due to {reason}"
+        )
 
 
 if __name__ == "__main__":
