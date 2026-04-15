@@ -42,3 +42,53 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# temp files and logs
+*.log
+*. Duckdb*
+*.duckdb
+*.wal
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!affiliate-opportunities.json
+!src/**/*.json
+!web-intelligence-mcp/**/*.json
+!Forage_Graph/**/*.json
+
+# directories to ignore (untracked mess)
+.obsidian/
+Lead_Database/
+Forage_Graph/
+web/
+web-intelligence-mcp/
+flows/
+.github/
+
+# files in root
+andres_contreras_grassi_sales_playbook.pdf
+betfair_client.*
+ernesta_dynamic.png
+*.bat
+*.ps1
+*.sh
+*.py
+*.js
+!next.config.ts
+!tailwind.config.js
+!postcss.config.mjs
+!eslint.config.mjs
+!src/**/*.js
+!migrate.js
+
+# credit records
+companies_*.json
+wikidata_*.json
+intel_backup.json
+export.json
+current_wf.json
+minimal_wf.json
+no_settings_wf.json
+wf_*.json
+temp_rename.json

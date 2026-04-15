@@ -1,0 +1,100 @@
+import crypto from 'crypto';
+
+const APIFY_TOKEN = process.env.APIFY_TOKEN;
+const KV_STORE_ID = 'C6MnJekCd6ekH9dAs'; // forage-users
+
+export interface UserRecord {
+  apifyUserId: string;
+  apifyUsername: string;
+  email: string;
+  useCase: string;
+  credits: number;
+  creditsUsed: number;
+  createdAt: string;
+  source: string;
+}
+
+export async function verifyApifyToken(token: string) {
+  try {
+    const res = await fetch('https://api.apify.com/v2/users/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) {
+      return { valid: false, error: 'Invalid Apify token' };
+    }
+
+    const { data } = await res.json();
+    return {
+      valid: true,
+      userId: data.id,
+      username: data.username,
+      email: data.email
+    };
+  } catch (error) {
+    return { valid: false, error: 'Failed to verify token' };
+  }
+}
+
+export async function getUserRecord(apifyUserId: string): Promise<UserRecord | null> {
+  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not configured');
+  
+  try {
+    const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${apifyUserId}?token=${APIFY_TOKEN}`);
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error('Failed to fetch user record');
+    return await res.json();
+  } catch (error) {
+    console.error('getUserRecord error:', error);
+    return null;
+  }
+}
+
+export async function setUserRecord(record: UserRecord) {
+  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not configured');
+
+  // Set the primary record
+  await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${record.apifyUserId}?token=${APIFY_TOKEN}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(record)
+  });
+
+  // Set the email index
+  const emailKey = `email:${record.email.toLowerCase()}`;
+  await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${APIFY_TOKEN}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ apifyUserId: record.apifyUserId })
+  });
+}
+
+export async function getUserIdByEmail(email: string): Promise<string | null> {
+  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not configured');
+  
+  const emailKey = `email:${email.toLowerCase()}`;
+  try {
+    const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${APIFY_TOKEN}`);
+    if (res.status === 404) return null;
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.apifyUserId;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function checkDuplicate(apifyUserId: string, email: string) {
+  const byId = await getUserRecord(apifyUserId);
+  if (byId) return { isDuplicate: true, record: byId };
+
+  const idByEmail = await getUserIdByEmail(email);
+  if (idByEmail) {
+    const byEmail = await getUserRecord(idByEmail);
+    if (byEmail) return { isDuplicate: true, record: byEmail };
+  }
+
+  return { isDuplicate: false };
+}

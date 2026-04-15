@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Check, Loader2, AlertCircle } from 'lucide-react';
+import { ArrowRight, Check, Loader2, AlertCircle, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 
 type SignupState = 'idle' | 'loading' | 'success' | 'error';
+type TokenStatus = 'idle' | 'verifying' | 'valid' | 'invalid';
 
 interface SignupResponse {
   success: boolean;
@@ -15,17 +16,77 @@ interface SignupResponse {
   apiKey: string;
 }
 
+const USE_CASES = [
+  'B2B Lead Gen',
+  'Competitor Intel',
+  'Trading / Prediction Markets',
+  'General Research',
+  'Other'
+];
+
 export function SignupForm() {
   const [email, setEmail] = useState('');
+  const [apifyToken, setApifyToken] = useState('');
+  const [useCase, setUseCase] = useState('');
+  const [showToken, setShowToken] = useState(false);
+  const [tokenStatus, setTokenStatus] = useState<TokenStatus>('idle');
+  const [apifyUsername, setApifyUsername] = useState('');
+  
   const [state, setState] = useState<SignupState>('idle');
   const [response, setResponse] = useState<SignupResponse | null>(null);
   const [error, setError] = useState('');
+
+  // Debounced token verification
+  const verifyToken = useCallback(async (token: string) => {
+    if (!token || token.length < 10) {
+      setTokenStatus('idle');
+      return;
+    }
+
+    setTokenStatus('verifying');
+    try {
+      const res = await fetch('/api/verify-apify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apifyToken: token }),
+      });
+      const data = await res.json();
+      
+      if (data.valid) {
+        setTokenStatus('valid');
+        setApifyUsername(data.username);
+      } else {
+        setTokenStatus('invalid');
+      }
+    } catch (err) {
+      setTokenStatus('invalid');
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (apifyToken) verifyToken(apifyToken);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [apifyToken, verifyToken]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email || !email.includes('@')) {
       setError('Please enter a valid email');
+      return;
+    }
+    if (!apifyToken) {
+      setError('Apify token is required');
+      return;
+    }
+    if (!useCase) {
+      setError('Please select a use case');
+      return;
+    }
+    if (tokenStatus === 'invalid') {
+      setError('Invalid Apify token');
       return;
     }
 
@@ -36,7 +97,7 @@ export function SignupForm() {
       const res = await fetch('/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, apifyToken, useCase }),
       });
 
       const data = await res.json();
@@ -53,7 +114,6 @@ export function SignupForm() {
     }
   };
 
-  // Helper to render URLs as clickable links
   const renderMessageWithLinks = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const parts = text.split(urlRegex);
@@ -75,8 +135,6 @@ export function SignupForm() {
       return part;
     });
   };
-
-
 
   return (
     <div style={{ width: '100%', maxWidth: 480 }}>
@@ -159,8 +217,6 @@ export function SignupForm() {
               </p>
             </div>
 
-
-
              {/* Connect instructions */}
              <div style={{
                padding: 20,
@@ -193,16 +249,6 @@ export function SignupForm() {
                     >
                       Apify Account → Integrations
                     </a>
-                    {' (or '}
-                    <a 
-                      href="https://console.apify.com/sign-up" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      style={{ color: 'var(--accent)', textDecoration: 'none' }}
-                    >
-                      sign up
-                    </a>
-                    {' if new)'}
                   </div>
                  <div style={{ marginBottom: 8 }}>
                    <span style={{ color: 'var(--foreground-muted)' }}>2. Add MCP server to your client</span>
@@ -233,60 +279,157 @@ export function SignupForm() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
             onSubmit={handleSubmit}
-            style={{ width: '100%' }}
+            style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}
           >
-            <div style={{
-              display: 'flex',
-              gap: 12,
-              flexWrap: 'wrap',
-            }}>
+            {/* Email field */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--foreground-secondary)' }}>
+                Email address
+              </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="you@example.com"
                 disabled={state === 'loading'}
                 style={{
-                  flex: '1 1 240px',
-                  padding: '16px 20px',
+                  width: '100%',
+                  padding: '12px 16px',
                   background: 'var(--background-secondary)',
                   border: '1px solid var(--border)',
-                  borderRadius: 12,
-                  fontSize: 15,
+                  borderRadius: 10,
+                  fontSize: 14,
                   color: 'var(--foreground)',
                   outline: 'none',
-                  transition: 'border-color 0.2s',
                 }}
-                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--accent)'}
-                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--border)'}
               />
-              <motion.button
-                type="submit"
+            </div>
+
+            {/* Apify Token field */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--foreground-secondary)' }}>
+                  Apify API Token
+                </label>
+                <a 
+                  href="https://console.apify.com/account#/integrations" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'none' }}
+                >
+                  Find your token →
+                </a>
+              </div>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showToken ? "text" : "password"}
+                  value={apifyToken}
+                  onChange={(e) => setApifyToken(e.target.value)}
+                  placeholder="Your Apify Token"
+                  disabled={state === 'loading'}
+                  style={{
+                    width: '100%',
+                    padding: '12px 44px 12px 16px',
+                    background: 'var(--background-secondary)',
+                    border: tokenStatus === 'invalid' ? '1px solid var(--error)' : 
+                            tokenStatus === 'valid' ? '1px solid var(--success)' : 
+                            '1px solid var(--border)',
+                    borderRadius: 10,
+                    fontSize: 14,
+                    color: 'var(--foreground)',
+                    outline: 'none',
+                    fontFamily: 'monospace',
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowToken(!showToken)}
+                  style={{
+                    position: 'absolute',
+                    right: 12,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--foreground-tertiary)',
+                    cursor: 'pointer',
+                    padding: 4,
+                  }}
+                >
+                  {showToken ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+                {/* Validation Indicator */}
+                <div style={{ position: 'absolute', right: 44, top: '50%', transform: 'translateY(-50%)', display: 'flex' }}>
+                   {tokenStatus === 'verifying' && <Loader2 size={16} className="spin" style={{ color: 'var(--foreground-muted)' }} />}
+                   {tokenStatus === 'valid' && <CheckCircle2 size={16} style={{ color: 'var(--success)' }} />}
+                   {tokenStatus === 'invalid' && <AlertCircle size={16} style={{ color: 'var(--error)' }} />}
+                </div>
+              </div>
+              {tokenStatus === 'valid' && (
+                <span style={{ fontSize: 11, color: 'var(--success)', marginTop: 2 }}>
+                  Connected as {apifyUsername}
+                </span>
+              )}
+            </div>
+
+            {/* Use case dropdown */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--foreground-secondary)' }}>
+                What will you use Forage for?
+              </label>
+              <select
+                value={useCase}
+                onChange={(e) => setUseCase(e.target.value)}
                 disabled={state === 'loading'}
-                whileHover={{ scale: state === 'loading' ? 1 : 1.02 }}
-                whileTap={{ scale: state === 'loading' ? 1 : 0.98 }}
-                className="btn btn-primary"
                 style={{
-                  padding: '16px 28px',
-                  fontSize: 15,
-                  fontWeight: 600,
-                  opacity: state === 'loading' ? 0.7 : 1,
-                  cursor: state === 'loading' ? 'not-allowed' : 'pointer',
+                  width: '100%',
+                  padding: '12px 16px',
+                  background: 'var(--background-secondary)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  color: 'var(--foreground)',
+                  outline: 'none',
+                  appearance: 'none',
+                  cursor: 'pointer',
                 }}
               >
-                {state === 'loading' ? (
-                  <>
-                    <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
-                    Creating...
-                  </>
-                ) : (
-                  <>
-                    Start Free
-                    <ArrowRight size={18} />
-                  </>
-                )}
-              </motion.button>
+                <option value="" disabled>Select your primary use case</option>
+                {USE_CASES.map(u => (
+                  <option key={u} value={u}>{u}</option>
+                ))}
+              </select>
             </div>
+
+            <motion.button
+              type="submit"
+              disabled={state === 'loading' || tokenStatus === 'verifying'}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              className="btn btn-primary"
+              style={{
+                marginTop: 8,
+                padding: '14px 28px',
+                fontSize: 15,
+                fontWeight: 600,
+                opacity: (state === 'loading' || tokenStatus === 'verifying') ? 0.7 : 1,
+                cursor: (state === 'loading' || tokenStatus === 'verifying') ? 'not-allowed' : 'pointer',
+                width: '100%',
+                justifyContent: 'center',
+              }}
+            >
+              {state === 'loading' ? (
+                <>
+                  <Loader2 size={18} className="spin" />
+                  Creating...
+                </>
+              ) : (
+                <>
+                  Start Free
+                  <ArrowRight size={18} />
+                </>
+              )}
+            </motion.button>
 
             {/* Error message */}
             <AnimatePresence>
@@ -299,7 +442,6 @@ export function SignupForm() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 8,
-                    marginTop: 12,
                     padding: '10px 14px',
                     background: 'rgba(239, 68, 68, 0.1)',
                     border: '1px solid rgba(239, 68, 68, 0.3)',
@@ -313,9 +455,9 @@ export function SignupForm() {
             </AnimatePresence>
 
             <p style={{
-              fontSize: 13,
+              fontSize: 12,
               color: 'var(--foreground-tertiary)',
-              margin: '16px 0 0',
+              margin: 0,
               textAlign: 'center',
             }}>
                No credit card required · $5.00 credit included · Cancel anytime
@@ -324,6 +466,15 @@ export function SignupForm() {
         )}
       </AnimatePresence>
 
+      <style jsx>{`
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
