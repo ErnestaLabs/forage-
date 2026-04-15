@@ -11,7 +11,12 @@ export async function POST(request: NextRequest) {
 
     const result = await verifyApifyToken(apifyToken);
     return NextResponse.json(result);
-  } catch (error) {
-    return NextResponse.json({ valid: false, error: 'Verification failed' }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ 
+      valid: false, 
+      error: 'Verification failed', 
+      message: error.message,
+      stack: error.stack 
+    }, { status: 500 });
   }
 }
