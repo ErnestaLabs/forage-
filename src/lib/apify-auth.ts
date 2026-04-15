@@ -63,7 +63,10 @@ export async function setUserRecord(record: UserRecord) {
   });
 
   // Set the email index
-  const emailKey = `email:${record.email.toLowerCase()}`;
+  // Apify keys only allow a-z, A-Z, 0-9, _, -, ., ~
+  // Use MD5 hash of email to avoid invalid characters and potential collisions
+  const emailHash = crypto.createHash('md5').update(record.email.toLowerCase()).digest('hex');
+  const emailKey = `email_idx_${emailHash}`;
   await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${APIFY_TOKEN}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -74,7 +77,8 @@ export async function setUserRecord(record: UserRecord) {
 export async function getUserIdByEmail(email: string): Promise<string | null> {
   if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not configured');
   
-  const emailKey = `email:${email.toLowerCase()}`;
+  const emailHash = crypto.createHash('md5').update(email.toLowerCase()).digest('hex');
+  const emailKey = `email_idx_${emailHash}`;
   try {
     const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${APIFY_TOKEN}`);
     if (res.status === 404) return null;

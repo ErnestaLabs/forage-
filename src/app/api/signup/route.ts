@@ -62,8 +62,13 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Signup error:', error);
+    const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: 'Failed to process signup. Please try again.' },
+      { 
+        error: 'Failed to process signup. Please try again.',
+        debug: process.env.NODE_ENV === 'development' ? message : undefined,
+        reason: message.includes('APIFY_TOKEN') ? 'Server configuration error' : undefined
+      },
       { status: 500 }
     );
   }
