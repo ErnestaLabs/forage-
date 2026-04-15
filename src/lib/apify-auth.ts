@@ -1,6 +1,13 @@
 import crypto from 'crypto';
 
-const APIFY_TOKEN = process.env.APIFY_TOKEN;
+function getApifyToken() {
+  const token = process.env.APIFY_TOKEN;
+  if (!token) {
+    throw new Error('APIFY_TOKEN not configured in environment variables');
+  }
+  return token;
+}
+
 const KV_STORE_ID = 'C6MnJekCd6ekH9dAs'; // forage-users
 
 export interface UserRecord {
@@ -39,9 +46,9 @@ export async function verifyApifyToken(token: string) {
 }
 
 export async function getUserRecord(apifyUserId: string): Promise<UserRecord | null> {
-  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not configured');
+  const token = getApifyToken();
   
-  const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${apifyUserId}?token=${APIFY_TOKEN}`);
+  const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${apifyUserId}?token=${token}`);
   if (res.status === 404) return null;
   if (!res.ok) {
     const text = await res.text();
@@ -51,10 +58,10 @@ export async function getUserRecord(apifyUserId: string): Promise<UserRecord | n
 }
 
 export async function setUserRecord(record: UserRecord) {
-  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not configured');
+  const token = getApifyToken();
 
   // Set the primary record
-  const res1 = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${record.apifyUserId}?token=${APIFY_TOKEN}`, {
+  const res1 = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${record.apifyUserId}?token=${token}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(record)
@@ -70,7 +77,7 @@ export async function setUserRecord(record: UserRecord) {
   // Use MD5 hash of email to avoid invalid characters and potential collisions
   const emailHash = crypto.createHash('md5').update(record.email.toLowerCase()).digest('hex');
   const emailKey = `email_idx_${emailHash}`;
-  const res2 = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${APIFY_TOKEN}`, {
+  const res2 = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${token}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ apifyUserId: record.apifyUserId })
@@ -83,12 +90,12 @@ export async function setUserRecord(record: UserRecord) {
 }
 
 export async function getUserIdByEmail(email: string): Promise<string | null> {
-  if (!APIFY_TOKEN) throw new Error('APIFY_TOKEN not configured');
+  const token = getApifyToken();
   
   const emailHash = crypto.createHash('md5').update(email.toLowerCase()).digest('hex');
   const emailKey = `email_idx_${emailHash}`;
   
-  const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${APIFY_TOKEN}`);
+  const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${token}`);
   if (res.status === 404) return null;
   if (!res.ok) {
     const text = await res.text();

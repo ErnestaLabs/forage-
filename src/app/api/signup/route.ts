@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
       { 
-        error: message.includes('APIFY_TOKEN') ? 'Server configuration error: APIFY_TOKEN missing' : 
+        error: message.includes('not configured') ? 'Server configuration error: APIFY_TOKEN missing' : 
                message.includes('Apify API error') ? message : 'Failed to process signup. Please try again.',
         debug: process.env.NODE_ENV === 'development' ? message : undefined
       },
