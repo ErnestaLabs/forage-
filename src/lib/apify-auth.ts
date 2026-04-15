@@ -25,23 +25,28 @@ export async function verifyApifyToken(token: string) {
   try {
     const res = await fetch('https://api.apify.com/v2/users/me', {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token.trim()}`
       }
     });
 
+    const text = await res.text();
     if (!res.ok) {
-      return { valid: false, error: 'Invalid Apify token' };
+      return { valid: false, error: `Apify error: ${res.status} ${text}` };
     }
 
-    const { data } = await res.json();
-    return {
-      valid: true,
-      userId: data.id,
-      username: data.username,
-      email: data.email
-    };
-  } catch (error) {
-    return { valid: false, error: 'Failed to verify token' };
+    try {
+      const { data } = JSON.parse(text);
+      return {
+        valid: true,
+        userId: data.id,
+        username: data.username,
+        email: data.email
+      };
+    } catch (err: any) {
+      return { valid: false, error: `Apify returned invalid JSON: ${err.message}. Body: ${text.substring(0, 100)}` };
+    }
+  } catch (error: any) {
+    return { valid: false, error: `Fetch failed: ${error.message}` };
   }
 }
 
