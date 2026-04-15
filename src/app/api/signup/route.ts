@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     // 2. Verify Apify Token
     const auth = await verifyApifyToken(apifyToken);
     if (!auth.valid || !auth.userId || !auth.username) {
-      return NextResponse.json({ error: 'Invalid Apify token. Please check your token in Apify Console.' }, { status: 401 });
+      return NextResponse.json({ error: auth.error || 'Invalid Apify token' }, { status: 401 });
     }
 
     // 3. Check for duplicates
@@ -29,11 +29,11 @@ export async function POST(request: NextRequest) {
     if (isDuplicate && record) {
       return NextResponse.json({
         success: true,
-        message: `Welcome back, ${auth.username}! You have $${(record.credits - record.creditsUsed).toFixed(2)} remaining credit.`,
+        message: `Welcome back, ${auth.username}! Your account is active.`,
         isNewUser: false,
         userId: record.apifyUserId,
-        credits: record.credits - record.creditsUsed,
-        apiKey: '', // No longer used
+        credits: record.credits - (record.creditsUsed || 0),
+        apiKey: '',
       });
     }
 
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     const newRecord: UserRecord = {
       apifyUserId: auth.userId,
       apifyUsername: auth.username,
-      email: email.toLowerCase(),
+      email: email.toLowerCase().trim(),
       useCase: useCase,
       credits: 5.00,
       creditsUsed: 0,
@@ -49,6 +49,8 @@ export async function POST(request: NextRequest) {
       source: 'landing-page'
     };
 
+    // If APIFY_TOKEN is missing, we can't save but we can mock success for the demo if needed? 
+    // No, better to fail clearly.
     await setUserRecord(newRecord);
 
     return NextResponse.json({
@@ -60,16 +62,19 @@ export async function POST(request: NextRequest) {
       apiKey: '',
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Signup error:', error);
-    const message = error instanceof Error ? error.message : String(error);
-    const timestamp = new Date().toISOString();
+    
+    // Check if it's our configuration error
+    if (error.message?.includes('APIFY_TOKEN')) {
+      return NextResponse.json(
+        { error: 'Server configuration error. Please contact support or try again later.' },
+        { status: 503 }
+      );
+    }
+
     return NextResponse.json(
-      { 
-        error: message.includes('not configured') ? `Server configuration error: APIFY_TOKEN missing [${timestamp}]` : 
-               message.includes('Apify API error') ? `${message} [${timestamp}]` : `Signup failed: ${message} [${timestamp}]`,
-        debug: process.env.NODE_ENV === 'development' ? message : undefined
-      },
+      { error: 'Failed to process signup. Please check your connection and try again.' },
       { status: 500 }
     );
   }
