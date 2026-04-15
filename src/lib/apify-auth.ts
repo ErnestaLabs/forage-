@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+// apify-auth.ts
 
 function getApifyToken() {
   const token = process.env.APIFY_TOKEN;
@@ -63,6 +63,17 @@ export async function getUserRecord(apifyUserId: string): Promise<UserRecord | n
   }
 }
 
+// Simple hash function to avoid crypto import issues in Edge/restricted environments
+function simpleHash(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(36);
+}
+
 export async function setUserRecord(record: UserRecord) {
   const token = getApifyToken();
 
@@ -79,8 +90,8 @@ export async function setUserRecord(record: UserRecord) {
   }
 
   // Set the email index
-  // Use MD5 hash of email to avoid invalid characters
-  const emailHash = crypto.createHash('md5').update(record.email.toLowerCase()).digest('hex');
+  // Use simple hash of email to avoid invalid characters
+  const emailHash = simpleHash(record.email.toLowerCase());
   const emailKey = `email_idx_${emailHash}`;
   const res2 = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${token}`, {
     method: 'PUT',
@@ -97,7 +108,7 @@ export async function setUserRecord(record: UserRecord) {
 export async function getUserIdByEmail(email: string): Promise<string | null> {
   const token = getApifyToken();
   
-  const emailHash = crypto.createHash('md5').update(email.toLowerCase()).digest('hex');
+  const emailHash = simpleHash(email.toLowerCase());
   const emailKey = `email_idx_${emailHash}`;
   
   const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${token}`);
