@@ -50,11 +50,17 @@ export async function getUserRecord(apifyUserId: string): Promise<UserRecord | n
   
   const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${apifyUserId}?token=${token}`);
   if (res.status === 404) return null;
+  
+  const text = await res.text();
   if (!res.ok) {
-    const text = await res.text();
     throw new Error(`Apify API error (getUserRecord): ${res.status} ${text}`);
   }
-  return await res.json();
+  
+  try {
+    return JSON.parse(text);
+  } catch (err: any) {
+    throw new Error(`JSON parse error (getUserRecord): ${err.message}. Body starts with: ${text.substring(0, 50)}`);
+  }
 }
 
 export async function setUserRecord(record: UserRecord) {
@@ -73,8 +79,7 @@ export async function setUserRecord(record: UserRecord) {
   }
 
   // Set the email index
-  // Apify keys only allow a-z, A-Z, 0-9, _, -, ., ~
-  // Use MD5 hash of email to avoid invalid characters and potential collisions
+  // Use MD5 hash of email to avoid invalid characters
   const emailHash = crypto.createHash('md5').update(record.email.toLowerCase()).digest('hex');
   const emailKey = `email_idx_${emailHash}`;
   const res2 = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${token}`, {
@@ -97,12 +102,18 @@ export async function getUserIdByEmail(email: string): Promise<string | null> {
   
   const res = await fetch(`https://api.apify.com/v2/key-value-stores/${KV_STORE_ID}/records/${emailKey}?token=${token}`);
   if (res.status === 404) return null;
+  
+  const text = await res.text();
   if (!res.ok) {
-    const text = await res.text();
     throw new Error(`Apify API error (getUserIdByEmail): ${res.status} ${text}`);
   }
-  const data = await res.json();
-  return data.apifyUserId;
+  
+  try {
+    const data = JSON.parse(text);
+    return data.apifyUserId;
+  } catch (err: any) {
+    throw new Error(`JSON parse error (getUserIdByEmail): ${err.message}. Body starts with: ${text.substring(0, 50)}`);
+  }
 }
 
 export async function checkDuplicate(apifyUserId: string, email: string) {
