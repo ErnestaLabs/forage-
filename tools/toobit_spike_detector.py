@@ -68,7 +68,8 @@ class SpikeDetector:
         std_move = abs(p_end - p_start) / vol if vol > 0 else 0
 
         # 1. SPIKE DETECTION
-        is_spike = (move_pct >= self.spike_percent) or (std_move >= self.spike_std_dev)
+        # Require BOTH a significant standard deviation move and a minimum percentage move
+        is_spike = (move_pct >= self.spike_percent) and (std_move >= self.spike_std_dev)
         if not is_spike:
             return None
 
